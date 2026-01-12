@@ -2,20 +2,25 @@
   "name": "desktop-manager",
   "version": "0.1.0",
   "description": "Desktop automation manager for Appium, browsers, and screen streaming",
+  "type": "module",
   "main": "src/index.js",
   "keywords": [
     "desktop",
     "appium",
-    "screen-recording",
+    "screen-streaming",
     "mjpeg",
+    "websocket",
     "automation"
   ],
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "license": "MIT",
   "dependencies": {
     "express": "^5.2.1",
+    "screenshot-desktop": "^1.15.3",
+    "sharp": "^0.34.5",
     "ws": "^8.19.0"
   },
   "devDependencies": {

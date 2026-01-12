@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0;background:black">
+  <img id="screen" />
+
+  <script>
+    const ws = new WebSocket('ws://localhost:9200');
+    ws.binaryType = 'arraybuffer';
+
+    ws.onmessage = (event) => {
+      const blob = new Blob([event.data], { type: 'image/jpeg' });
+      document.getElementById('screen').src = URL.createObjectURL(blob);
+    };
+  </script>
+</body>
+</html>

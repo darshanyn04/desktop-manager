@@ -1,16 +1,9 @@
-module.exports = {
-  startAppium,
-  stopAppium,
-  launchBrowser,
-  startScreenStream,
-  stopScreenStream,
-  takeScreenshot,
-  startRecording,
-  stopRecording
-};
+import { start } from '../services/screen-stream/index.js';
 
-const { startAppium, stopAppium } = require("./appium/appiumManager");
-const { launchBrowser } = require("./browser/browserLauncher");
-const { startScreenStream, stopScreenStream } = require("./screen/mjpegStreamer");
-const { takeScreenshot } = require("./screen/screenshot");
-const { startRecording, stopRecording } = require("./screen/recorder");
+const PORT = process.env.STREAM_PORT || 9200;
+const FPS = process.env.STREAM_FPS || 5;
+
+start({
+  port: Number(PORT),
+  fps: Number(FPS),
+});
