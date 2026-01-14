@@ -1,9 +1,10 @@
-import { isMac, isWindows } from '../../../common/osDetector.js';
-import captureMac from './mac.js';
-import captureWindows from './windows.js';
+import { platform } from 'os';
+import { captureMac } from './mac.js';
+import { captureWindows } from './windows.js';
 
-export default async function capture() {
-  if (isMac()) return captureMac();
-  if (isWindows()) return captureWindows();
+export async function captureFrame() {
+  const os = platform();
+  if (os === 'darwin') return captureMac();
+  if (os === 'win32') return captureWindows();
   throw new Error('Unsupported OS');
 }
