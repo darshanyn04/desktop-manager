@@ -3,18 +3,36 @@ import { frameBus } from '../../common/frameBus.js';
 import { captureFrame } from './capture/index.js';
 
 let intervalId = null;
+let wss = null;
 
 export function startScreenStream({ fps = 5, port = 9500 } = {}) {
-  const wss = new WebSocketServer({ port });
+  if (wss) {
+    console.log('📺 Screen stream already running');
+    return;
+  }
+
+  wss = new WebSocketServer({ port });
   console.log(`📺 Screen stream WS server running on ws://localhost:${port}`);
 
   // Broadcast MJPEG frames to all connected clients
   wss.on('connection', (ws) => {
     console.log('🔗 Client connected to MJPEG stream');
+
+    ws.on('close', () => {
+      console.log('❌ Client disconnected from MJPEG stream');
+
+      // If no clients remain, stop streaming
+      if (wss.clients.size === 0) {
+        console.log('🛑 No clients connected, stopping screen capture');
+        stopScreenStream();
+      }
+    });
   });
 
   intervalId = setInterval(async () => {
     try {
+      if (wss.clients.size === 0) return; // safety check
+
       const buffer = await captureFrame();
       frameBus.emit('frame', { buffer });
 
@@ -31,5 +49,16 @@ export function startScreenStream({ fps = 5, port = 9500 } = {}) {
 }
 
 export function stopScreenStream() {
-  clearInterval(intervalId);
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+    console.log('🛑 Screen streaming interval stopped');
+  }
+
+  if (wss) {
+    wss.close(() => {
+      console.log('🛑 WebSocket server closed');
+    });
+    wss = null;
+  }
 }
