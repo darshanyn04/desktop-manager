@@ -1,9 +1,20 @@
-import { start } from '../services/screen-stream/index.js';
+import express from 'express';
+import { registerRecordingRoutes } from '../services/recording/index.js';
+import { startScreenStream } from '../services/screen-stream/index.js';
 
-const PORT = process.env.STREAM_PORT || 9200;
-const FPS = process.env.STREAM_FPS || 5;
+const app = express();
+const PORT = 9400;
 
-start({
-  port: Number(PORT),
-  fps: Number(FPS),
+// Start screen stream WS server
+startScreenStream({ fps: 5, port: 9500 });
+
+// Register recording routes
+registerRecordingRoutes(app);
+
+// Health check
+app.get('/health', (_, res) => res.send('OK'));
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Desktop Manager running on http://localhost:${PORT}`);
 });

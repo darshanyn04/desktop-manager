@@ -1,30 +1,25 @@
 import { WebSocketServer } from 'ws';
-import capture from './capture/index.js';
+import { frameBus } from '../../common/frameBus.js';
 
-export function startWsServer({ port = 9200, fps = 5 } = {}) {
+export function startWsServer({ port }) {
   const wss = new WebSocketServer({ port });
 
-  console.log(`🔥 Screen WS Stream running on ws://0.0.0.0:${port}`);
-
   wss.on('connection', (ws) => {
-    console.log('📡 Client connected → starting stream');
+    console.log('📡 WS client connected');
 
-    const interval = setInterval(async () => {
-      try {
-        const frame = await capture();
-        if (ws.readyState === ws.OPEN) {
-          ws.send(frame);
-        }
-      } catch (err) {
-        console.error('❌ Capture error:', err.message);
+    const onFrame = ({ buffer }) => {
+      if (ws.readyState === ws.OPEN) {
+        ws.send(buffer);
       }
-    }, 1000 / fps);
+    };
+
+    frameBus.on('frame', onFrame);
 
     ws.on('close', () => {
-      console.log('🛑 Client disconnected → stopping stream');
-      clearInterval(interval);
+      frameBus.off('frame', onFrame);
+      console.log('❌ WS client disconnected');
     });
   });
 
-  return wss;
+  console.log(`📡 MJPEG WS streaming on ws://0.0.0.0:${port}`);
 }
