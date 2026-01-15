@@ -1,10 +1,18 @@
 import { platform } from 'os';
 import { captureMac } from './mac.js';
 import { captureWindows } from './windows.js';
+import { getCursorPosition } from './cursor.js';
+import { overlayCursor } from './overlay.js';
 
 export async function captureFrame() {
   const os = platform();
-  if (os === 'darwin') return captureMac();
-  if (os === 'win32') return captureWindows();
-  throw new Error('Unsupported OS');
+
+  let frame;
+
+  if (os === 'darwin') frame = await captureMac();
+  else if (os === 'win32') frame = await captureWindows();
+  else throw new Error('Unsupported OS');
+
+  const cursor = getCursorPosition();
+  return overlayCursor(frame, cursor);
 }
