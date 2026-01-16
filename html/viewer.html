@@ -4,7 +4,7 @@
   <img id="screen" />
 
   <script>
-    const ws = new WebSocket('ws://localhost:9500');
+    const ws = new WebSocket('ws://10.8.0.112:9500');
     ws.binaryType = 'arraybuffer';
 
     ws.onmessage = (event) => {
