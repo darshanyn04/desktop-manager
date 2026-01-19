@@ -15,8 +15,9 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "build:native": "bash scripts/build-mac-capture.sh",
-    "postinstall": "npm run build:native"
+
+    "build:native": "node scripts/build-native.js",
+    "postinstall": "node scripts/postinstall.js"
   },
   "license": "MIT",
   "dependencies": {
