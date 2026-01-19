@@ -30,8 +30,22 @@ router.post('/stop', async (req, res) => {
     'Connection': 'close'
   });
 
-  fs.createReadStream(filePath).pipe(res);
+  const stream = fs.createReadStream(filePath);
+
+  stream.pipe(res);
+
+  // ✅ Delete file AFTER download completes
+  res.on('finish', () => {
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error('❌ Failed to delete recording:', err);
+      } else {
+        console.log('🗑️ Recording file deleted:', filePath);
+      }
+    });
+  });
 });
+
 
 
 
