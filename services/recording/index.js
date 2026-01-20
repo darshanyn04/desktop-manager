@@ -2,7 +2,6 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { startRecording, stopRecording, status } from './recorder.js';
-import { randomBytes } from 'node:crypto';
 
 
 export function registerRecordingRoutes(app) {
@@ -34,7 +33,6 @@ router.post('/stop', async (req, res) => {
 
   stream.pipe(res);
 
-  // ✅ Delete file AFTER download completes
   res.on('finish', () => {
     fs.unlink(filePath, (err) => {
       if (err) {

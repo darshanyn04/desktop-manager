@@ -1,15 +1,23 @@
 import { spawn } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { captureFrame } from '../screen-stream/capture/index.js';
+import os from 'os';
+import { frameBus } from '../../common/frameBus.js';
+
+/* ---------------- CONFIG ---------------- */
+
+const RECORDINGS_DIR = path.resolve('recordings');
+const RECORD_WIDTH = 1920;
+const RECORD_HEIGHT = 1080;
+const FPS = 24;
+
+/* ---------------- STATE ---------------- */
 
 let recording = false;
 let ffmpeg = null;
-let intervalId = null;
 let outputFile = null;
 
-const RECORDINGS_DIR = path.resolve('recordings');
-const FPS = 5; // must match real capture speed
+/* ---------------- START ---------------- */
 
 export function startRecording() {
   if (recording) return outputFile;
@@ -21,63 +29,86 @@ export function startRecording() {
     `recording-${Date.now()}.mp4`
   );
 
-  ffmpeg = spawn('ffmpeg', [
-    '-y',
-    '-f', 'image2pipe',
-    '-framerate', String(FPS),
-    '-vcodec', 'mjpeg',
-    '-i', 'pipe:0',
-    '-pix_fmt', 'yuv420p',
-    '-vcodec', 'libx264',
-    '-preset', 'veryfast',
-    '-movflags', 'frag_keyframe+empty_moov+faststart',
-    outputFile
-  ], { stdio: ['pipe', 'ignore', 'pipe'] });
+  const platform = os.platform();
+
+const ffmpegArgs = [
+  '-y',
+  '-loglevel', 'error',
+
+  '-f', 'x11grab',
+  '-framerate', String(FPS),
+  '-i', process.env.DISPLAY || ':0.0',
+
+
+  '-c:v', 'libx264',
+  '-preset', 'veryfast',
+  '-tune', 'zerolatency',
+  '-pix_fmt', 'yuv420p',
+  '-movflags', '+faststart+frag_keyframe+empty_moov',
+
+
+  outputFile
+];
+
+  ffmpeg = spawn('ffmpeg', ffmpegArgs, {
+    stdio: ['pipe', 'ignore', 'pipe']
+  });
 
   ffmpeg.stderr.on('data', d => {
     console.error('[FFMPEG]', d.toString());
   });
 
-  intervalId = setInterval(async () => {
-    try {
-      const buffer = await captureFrame();
-      if (ffmpeg.stdin.writable) {
-        ffmpeg.stdin.write(buffer);
-      }
-    } catch (err) {
-      console.error('Recording capture error:', err);
-    }
-  }, 1000 / FPS);
+  frameBus.on('frame', onFrame);
 
   recording = true;
   console.log('🎥 Recording started:', outputFile);
+
   return outputFile;
 }
+/* ---------------- FRAME HANDLER ---------------- */
+
+function onFrame(buffer) {
+  if (!recording || !buffer) return;
+
+  if (ffmpeg?.stdin?.writable) {
+    ffmpeg.stdin.write(buffer);
+  }
+}
+
 
 export async function stopRecording() {
   if (!recording) return null;
 
   recording = false;
-  clearInterval(intervalId);
 
-  if (ffmpeg?.stdin?.writable) {
-    ffmpeg.stdin.end();
-  }
+  if (!ffmpeg) return null;
 
-  await new Promise(resolve => ffmpeg.once('exit', resolve));
+  console.log('🛑 Stopping recording...');
+
+  // ✅ Properly stop FFmpeg
+  ffmpeg.kill('SIGINT');
+
+  await new Promise((resolve) => {
+    ffmpeg.once('exit', resolve);
+  });
+
+  ffmpeg = null;
 
   if (!fs.existsSync(outputFile)) {
     console.error('❌ Recording failed: file not created');
     return null;
   }
 
-  console.log('🛑 Recording saved:', outputFile);
+  console.log('✅ Recording saved:', outputFile);
   return outputFile;
 }
 
 export function status() {
   return {
     recording,
-    file: outputFile
+    file: outputFile,
+    resolution: `${RECORD_WIDTH}x${RECORD_HEIGHT}`,
+    fps: FPS,
+    platform: os.platform()
   };
 }
