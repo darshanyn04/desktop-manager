@@ -7,8 +7,6 @@ import { frameBus } from '../../common/frameBus.js';
 /* ---------------- CONFIG ---------------- */
 
 const RECORDINGS_DIR = path.resolve('recordings');
-const RECORD_WIDTH = 1920;
-const RECORD_HEIGHT = 1080;
 const FPS = 24;
 
 /* ---------------- STATE ---------------- */
@@ -30,65 +28,126 @@ export function startRecording() {
   );
 
   const platform = os.platform();
+  let ffmpegArgs = [];
 
-const ffmpegArgs = [
-  '-y',
-  '-loglevel', 'error',
+  /* ================= MACOS (MJPEG PIPE) ================= */
 
-  '-f', 'x11grab',
-  '-framerate', String(FPS),
-  '-i', process.env.DISPLAY || ':0.0',
+  if (platform === 'darwin') {
+    ffmpegArgs = [
+      '-y',
+      '-loglevel', 'error',
 
+      // 🔑 INPUT: MJPEG frames from Swift
+      '-f', 'image2pipe',
+      '-vcodec', 'mjpeg',
+      '-framerate', String(FPS),
+      '-i', 'pipe:0',
 
-  '-c:v', 'libx264',
-  '-preset', 'veryfast',
-  '-tune', 'zerolatency',
-  '-pix_fmt', 'yuv420p',
-  '-movflags', '+faststart+frag_keyframe+empty_moov',
+      // 🔑 OUTPUT
+      '-c:v', 'libx264',
+      '-preset', 'veryfast',
+      '-tune', 'zerolatency',
+      '-pix_fmt', 'yuv420p',
+      '-movflags', '+faststart+frag_keyframe+empty_moov',
 
+      outputFile
+    ];
+  }
 
-  outputFile
-];
+  /* ================= LINUX (X11) ================= */
+
+  else if (platform === 'linux') {
+    ffmpegArgs = [
+      '-y',
+      '-loglevel', 'error',
+
+      '-f', 'x11grab',
+      '-framerate', String(FPS),
+      '-i', process.env.DISPLAY || ':0.0',
+
+      '-c:v', 'libx264',
+      '-preset', 'veryfast',
+      '-tune', 'zerolatency',
+      '-pix_fmt', 'yuv420p',
+      '-movflags', '+faststart+frag_keyframe+empty_moov',
+
+      outputFile
+    ];
+  }
+
+  /* ================= WINDOWS ================= */
+
+  else if (platform === 'win32') {
+    ffmpegArgs = [
+      '-y',
+      '-loglevel', 'error',
+
+      '-f', 'gdigrab',
+      '-framerate', String(FPS),
+      '-i', 'desktop',
+
+      '-c:v', 'libx264',
+      '-preset', 'veryfast',
+      '-tune', 'zerolatency',
+      '-pix_fmt', 'yuv420p',
+      '-movflags', '+faststart+frag_keyframe+empty_moov',
+
+      outputFile
+    ];
+  }
+
+  else {
+    throw new Error(`Unsupported platform: ${platform}`);
+  }
 
   ffmpeg = spawn('ffmpeg', ffmpegArgs, {
-    stdio: ['pipe', 'ignore', 'pipe']
+    stdio: platform === 'darwin'
+      ? ['pipe', 'ignore', 'pipe'] // mac needs stdin
+      : ['ignore', 'ignore', 'pipe']
   });
 
   ffmpeg.stderr.on('data', d => {
     console.error('[FFMPEG]', d.toString());
   });
 
-  frameBus.on('frame', onFrame);
+  // 🔥 Only macOS uses frameBus
+  if (platform === 'darwin') {
+    frameBus.on('frame', onMacFrame);
+  }
 
   recording = true;
-  console.log('🎥 Recording started:', outputFile);
+  console.log(`🎥 Recording started (${platform}):`, outputFile);
 
   return outputFile;
 }
-/* ---------------- FRAME HANDLER ---------------- */
 
-function onFrame(buffer) {
+/* ---------------- MAC FRAME HANDLER ---------------- */
+
+function onMacFrame(buffer) {
   if (!recording || !buffer) return;
-
   if (ffmpeg?.stdin?.writable) {
     ffmpeg.stdin.write(buffer);
   }
 }
 
+/* ---------------- STOP ---------------- */
 
 export async function stopRecording() {
-  if (!recording) return null;
+  if (!recording || !ffmpeg) return null;
 
   recording = false;
-
-  if (!ffmpeg) return null;
+  const platform = os.platform();
 
   console.log('🛑 Stopping recording...');
 
-  // ✅ Properly stop FFmpeg
-  ffmpeg.kill('SIGINT');
+  if (platform === 'darwin') {
+    frameBus.off('frame', onMacFrame);
+    ffmpeg.stdin.end(); // MJPEG pipe
+  } else {
+    ffmpeg.kill('SIGINT'); // direct capture
+  }
 
-  await new Promise((resolve) => {
+  await new Promise(resolve => {
     ffmpeg.once('exit', resolve);
   });
 
@@ -103,11 +162,12 @@ export async function stopRecording() {
   return outputFile;
 }
 
+/* ---------------- STATUS ---------------- */
+
 export function status() {
   return {
     recording,
     file: outputFile,
-    resolution: `${RECORD_WIDTH}x${RECORD_HEIGHT}`,
     fps: FPS,
     platform: os.platform()
   };
