@@ -1,83 +1,47 @@
-import { spawn } from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import { captureFrame } from '../screen-stream/capture/index.js';
+import os from 'os';
 
-let recording = false;
-let ffmpeg = null;
-let intervalId = null;
-let outputFile = null;
+import {
+  startMacRecording,
+  stopMacRecording,
+  macStatus
+} from './recorder.mac.js';
 
-const RECORDINGS_DIR = path.resolve('recordings');
-const FPS = 5; // must match real capture speed
+import {
+  startLinuxRecording,
+  stopLinuxRecording,
+  linuxStatus
+} from './recorder.linux.js';
+
+// import {
+//   startWindowsRecording,
+//   stopWindowsRecording,
+//   windowsStatus
+// } from './recorder.windows.js';
 
 export function startRecording() {
-  if (recording) return outputFile;
+  const platform = os.platform();
 
-  fs.mkdirSync(RECORDINGS_DIR, { recursive: true });
+  if (platform === 'darwin') return startMacRecording();
+  if (platform === 'linux') return startLinuxRecording();
+  // if (platform === 'win32') return startWindowsRecording();
 
-  outputFile = path.join(
-    RECORDINGS_DIR,
-    `recording-${Date.now()}.mp4`
-  );
-
-  ffmpeg = spawn('ffmpeg', [
-    '-y',
-    '-f', 'image2pipe',
-    '-framerate', String(FPS),
-    '-vcodec', 'mjpeg',
-    '-i', 'pipe:0',
-    '-pix_fmt', 'yuv420p',
-    '-vcodec', 'libx264',
-    '-preset', 'veryfast',
-    '-movflags', 'frag_keyframe+empty_moov+faststart',
-    outputFile
-  ], { stdio: ['pipe', 'ignore', 'pipe'] });
-
-  ffmpeg.stderr.on('data', d => {
-    console.error('[FFMPEG]', d.toString());
-  });
-
-  intervalId = setInterval(async () => {
-    try {
-      const buffer = await captureFrame();
-      if (ffmpeg.stdin.writable) {
-        ffmpeg.stdin.write(buffer);
-      }
-    } catch (err) {
-      console.error('Recording capture error:', err);
-    }
-  }, 1000 / FPS);
-
-  recording = true;
-  console.log('🎥 Recording started:', outputFile);
-  return outputFile;
+  throw new Error(`Unsupported platform: ${platform}`);
 }
 
-export async function stopRecording() {
-  if (!recording) return null;
+export function stopRecording() {
+  const platform = os.platform();
 
-  recording = false;
-  clearInterval(intervalId);
-
-  if (ffmpeg?.stdin?.writable) {
-    ffmpeg.stdin.end();
-  }
-
-  await new Promise(resolve => ffmpeg.once('exit', resolve));
-
-  if (!fs.existsSync(outputFile)) {
-    console.error('❌ Recording failed: file not created');
-    return null;
-  }
-
-  console.log('🛑 Recording saved:', outputFile);
-  return outputFile;
+  if (platform === 'darwin') return stopMacRecording();
+  if (platform === 'linux') return stopLinuxRecording();
+  // if (platform === 'win32') return stopWindowsRecording();
 }
 
 export function status() {
-  return {
-    recording,
-    file: outputFile
-  };
+  const platform = os.platform();
+
+  if (platform === 'darwin') return macStatus();
+  if (platform === 'linux') return linuxStatus();
+  // if (platform === 'win32') return windowsStatus();
+
+  return { recording: false };
 }
