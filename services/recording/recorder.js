@@ -12,18 +12,18 @@ import {
   linuxStatus
 } from './recorder.linux.js';
 
-// import {
-//   startWindowsRecording,
-//   stopWindowsRecording,
-//   windowsStatus
-// } from './recorder.windows.js';
+import {
+  startWindowsRecording,
+  stopWindowsRecording,
+  windowsStatus
+} from './recorder.windows.js';
 
 export function startRecording() {
   const platform = os.platform();
 
   if (platform === 'darwin') return startMacRecording();
   if (platform === 'linux') return startLinuxRecording();
-  // if (platform === 'win32') return startWindowsRecording();
+  if (platform === 'win32') return startWindowsRecording();
 
   throw new Error(`Unsupported platform: ${platform}`);
 }
@@ -33,7 +33,7 @@ export function stopRecording() {
 
   if (platform === 'darwin') return stopMacRecording();
   if (platform === 'linux') return stopLinuxRecording();
-  // if (platform === 'win32') return stopWindowsRecording();
+  if (platform === 'win32') return stopWindowsRecording();
 }
 
 export function status() {
@@ -41,7 +41,9 @@ export function status() {
 
   if (platform === 'darwin') return macStatus();
   if (platform === 'linux') return linuxStatus();
-  // if (platform === 'win32') return windowsStatus();
+  if (platform === 'win32') return windowsStatus();
 
   return { recording: false };
 }
+
+

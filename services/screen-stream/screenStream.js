@@ -1,100 +1,91 @@
-import { WebSocketServer } from "ws";
-import os from "os";
-import { frameBus } from "../../common/frameBus.js";
-import { captureFrame } from "./capture/index.js";
+import os from 'os';
+import { WebSocketServer } from 'ws';
+import { setLatestFrame } from '../recording/screenshotState.js';
 
-/* ---------------- STATE ---------------- */
+
+import {
+  startMacCapture,
+  macCaptureEmitter
+} from './macCapture.js';
+
+import {
+  startLinuxCapture,
+  linuxCaptureEmitter
+} from './linuxCapture.js';
+
+import {
+  startWindowsCapture,
+  stopWindowsCapture,
+  windowsCaptureEmitter
+} from './windowsCapture.js';
 
 let wss = null;
-let intervalId = null;
-let capturing = false;
-let capturingFrame = false;
+let frameEmitter = null;
+let activeClients = 0;
+let captureStarted = false;
 
-let currentFps = 10;
-let currentPort = 9500;
+// 📸 latest frame (JPEG from MJPEG stream)
+let latestFrame = null;
 
-/* ---------------- PUBLIC API ---------------- */
+export function startScreenStream({ port = 9500 } = {}) {
+  if (wss) return;
 
-export function startScreenStream({ fps = 10, port = 9500 } = {}) {
-  currentFps = fps;
-  currentPort = port;
-
-  if (wss) {
-    console.log(`⚙️ Screen stream already running → FPS ${fps}`);
-    return;
-  }
+  const platform = os.platform();
 
   wss = new WebSocketServer({ port });
-  console.log(`📺 WS Screen Stream → ws://localhost:${port}`);
+  console.log(`📺 WS server listening on ws://localhost:${port}`);
 
-  wss.on("connection", (ws) => {
-    console.log("🔗 Client connected");
+  wss.on('connection', (ws) => {
+    activeClients++;
+    console.log(`🔌 WS client connected (${activeClients})`);
 
-    if (!capturing) startCaptureLoop();
+    // ▶️ start capture on first client
+    if (!captureStarted) {
+      console.log('▶️ Starting screen capture');
 
-    ws.on("close", () => {
-      console.log("❌ Client disconnected");
-      if (wss.clients.size === 0) stopCaptureLoop();
+      if (platform === 'darwin') {
+        startMacCapture();
+        frameEmitter = macCaptureEmitter;
+      } else if (platform === 'linux') {
+        startLinuxCapture();
+        frameEmitter = linuxCaptureEmitter;
+      } else if (platform === 'win32') {
+        startWindowsCapture();
+        frameEmitter = windowsCaptureEmitter;
+      } else {
+        console.warn(`⚠️ Unsupported platform: ${platform}`);
+        return;
+      }
+
+      frameEmitter.on('frame', broadcastFrame);
+      captureStarted = true;
+    }
+
+    ws.on('close', () => {
+      activeClients--;
+      console.log(`❌ WS client disconnected (${activeClients})`);
+
+      // ⏹ stop capture when no clients left
+      if (activeClients === 0 && captureStarted) {
+        console.log('⏹️ Stopping screen capture (no clients)');
+        stopCapture(platform);
+        captureStarted = false;
+      }
     });
   });
 }
 
-export function shutdownScreenStream() {
-  stopCaptureLoop();
+function broadcastFrame(frame) {
+  // 📸 keep last frame for screenshot API
+setLatestFrame(frame);
 
-  if (wss) {
-    wss.close();
-    wss = null;
-    console.log("🛑 Screen stream stopped");
-  }
-}
-
-/* ---------------- CAPTURE LOOP ---------------- */
-
-function startCaptureLoop() {
-  if (intervalId) return;
-
-  capturing = true;
-  console.log(`▶️ Capturing @ ${currentFps} FPS`);
-
-  intervalId = setInterval(captureTick, 1000 / currentFps);
-}
-
-function stopCaptureLoop() {
-  if (!intervalId) return;
-
-  clearInterval(intervalId);
-  intervalId = null;
-  capturing = false;
-  capturingFrame = false;
-
-  console.log("⏸️ Capture paused (no clients)");
-}
-
-/* ---------------- FRAME CAPTURE ---------------- */
-
-async function captureTick() {
-  if (!wss || wss.clients.size === 0) return;
-  if (capturingFrame) return;
-
-  capturingFrame = true;
-
-  try {
-    const buffer = await captureFrame();
-    if (!buffer) return;
-
-    // recorder / other consumers
-    frameBus.emit("frame", { buffer });
-
-    // WS broadcast
-    for (const client of wss.clients) {
-      if (client.readyState === 1) {
-        client.send(buffer);
-      }
+  for (const client of wss.clients) {
+    if (client.readyState === 1) {
+      client.send(frame, { binary: true });
     }
-  } catch (err) {
-    console.error("❌ Capture error:", err.message);
-  } finally {
-    capturingFrame = false;
   }
+}
+
+function stopCapture(platform) {
+  if (platform === 'win32') stopWindowsCapture();
 }
