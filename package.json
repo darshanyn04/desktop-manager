@@ -14,12 +14,13 @@
   ],
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "build:native": "node scripts/build-native.js",
+    "postinstall": "node scripts/postinstall.js"
   },
   "license": "MIT",
   "dependencies": {
     "express": "^5.2.1",
-    "robotjs": "^0.6.0",
     "screenshot-desktop": "^1.15.3",
     "sharp": "^0.34.5",
     "ws": "^8.19.0"

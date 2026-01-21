@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:desktop-manager}/mac-capture",
+            "name": "Debug mac-capture (mac-capture)",
+            "target": "mac-capture",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug mac-capture (mac-capture)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:desktop-manager}/mac-capture",
+            "name": "Release mac-capture (mac-capture)",
+            "target": "mac-capture",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release mac-capture (mac-capture)"
+        }
+    ]
+}
