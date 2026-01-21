@@ -1,9 +1,28 @@
 {
   "name": "desktop-manager",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Desktop automation manager for Appium, browsers, and screen streaming",
   "type": "module",
-  "main": "src/index.js",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "desktop-manager": "./bin/desktop-manager.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "scripts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "node bin/desktop-manager.js",
+    "dev": "nodemon bin/desktop-manager.js",
+    "build:native": "node scripts/build-native.js",
+    "postinstall": "node scripts/postinstall.js"
+  },
   "keywords": [
     "desktop",
     "appium",
@@ -12,13 +31,11 @@
     "websocket",
     "automation"
   ],
-  "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "build:native": "node scripts/build-native.js",
-    "postinstall": "node scripts/postinstall.js"
-  },
+  "author": "Darshan N",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "express": "^5.2.1",
     "screenshot-desktop": "^1.15.3",
