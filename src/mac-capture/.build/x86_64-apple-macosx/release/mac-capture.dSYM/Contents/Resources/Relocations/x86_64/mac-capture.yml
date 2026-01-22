@@ -1,0 +1,55 @@
+---
+triple:          'x86_64-apple-darwin'
+binary-path:     '/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac-capture'
+relocations:
+  - { offset: 0x11F74A, size: 0x8, addend: 0x0, symName: '_$s11mac_capture11FrameOutputC6stream_03didD12SampleBuffer2ofySo8SCStreamC_So08CMSampleH3RefaSo0jD4TypeVtFTo', symObjAddr: 0x0, symBinAddr: 0x1000014D0, symSize: 0x70 }
+  - { offset: 0x11F843, size: 0x8, addend: 0x0, symName: '_$s11mac_capture11FrameOutputCfETo', symObjAddr: 0x130, symBinAddr: 0x100001600, symSize: 0x40 }
+  - { offset: 0x11F872, size: 0x8, addend: 0x0, symName: '_$s11mac_capture11FrameOutputCMa', symObjAddr: 0x170, symBinAddr: 0x100001640, symSize: 0x20 }
+  - { offset: 0x11F886, size: 0x8, addend: 0x0, symName: '_$ss22__RawDictionaryStorageC4findys10_HashTableV6BucketV6bucket_Sb5foundtxSHRzlFSo11CFStringRefa_Tg5', symObjAddr: 0x290, symBinAddr: 0x100001760, symSize: 0x80 }
+  - { offset: 0x11F8DD, size: 0x8, addend: 0x0, symName: '_$ss22__RawDictionaryStorageC4find_9hashValues10_HashTableV6BucketV6bucket_Sb5foundtx_SitSHRzlFSo11CFStringRefa_Tg5', symObjAddr: 0x310, symBinAddr: 0x1000017E0, symSize: 0xE0 }
+  - { offset: 0x11F9AF, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataV06InlineB0VyAESWcfCTf4nd_n', symObjAddr: 0x4E0, symBinAddr: 0x1000019B0, symSize: 0xD0 }
+  - { offset: 0x11FA32, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataV10LargeSliceVyAESWcfCTf4nd_n', symObjAddr: 0x5B0, symBinAddr: 0x100001A80, symSize: 0x80 }
+  - { offset: 0x11FA5F, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataV11InlineSliceVyAESWcfCTf4nd_n', symObjAddr: 0x630, symBinAddr: 0x100001B00, symSize: 0x70 }
+  - { offset: 0x11FAD5, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataV15_RepresentationOyAESWcfCTf4nd_n', symObjAddr: 0x6A0, symBinAddr: 0x100001B70, symSize: 0x70 }
+  - { offset: 0x11FB98, size: 0x8, addend: 0x0, symName: ___swift_instantiateConcreteTypeFromMangledNameV2, symObjAddr: 0xB00, symBinAddr: 0x100001FD0, symSize: 0x40 }
+  - { offset: 0x11FBAC, size: 0x8, addend: 0x0, symName: '_$sSo11CFStringRefa_SdtWOh', symObjAddr: 0xB40, symBinAddr: 0x100002010, symSize: 0x40 }
+  - { offset: 0x11FBC0, size: 0x8, addend: 0x0, symName: '_$sSo11CFStringRefaMa', symObjAddr: 0xB80, symBinAddr: 0x100002050, symSize: 0x30 }
+  - { offset: 0x11FBD4, size: 0x8, addend: 0x0, symName: '_$s10Foundation4DataV15_RepresentationOWOe', symObjAddr: 0xBB0, symBinAddr: 0x100002080, symSize: 0x40 }
+  - { offset: 0x11FBE8, size: 0x8, addend: 0x0, symName: '_$sSo11CFStringRefa14CoreFoundation9_CFObjectSCSHWb', symObjAddr: 0xBF0, symBinAddr: 0x1000020C0, symSize: 0x20 }
+  - { offset: 0x11FBFC, size: 0x8, addend: 0x0, symName: '_$sSo11CFStringRefaSHSCSQWb', symObjAddr: 0xC10, symBinAddr: 0x1000020E0, symSize: 0x20 }
+  - { offset: 0x11FC62, size: 0x8, addend: 0x0, symName: '_$s11mac_capture11FrameOutputC6stream_03didD12SampleBuffer2ofySo8SCStreamC_So08CMSampleH3RefaSo0jD4TypeVtFTo', symObjAddr: 0x0, symBinAddr: 0x1000014D0, symSize: 0x70 }
+  - { offset: 0x11FD48, size: 0x8, addend: 0x0, symName: '_$s11mac_capture11FrameOutputCACycfcTo', symObjAddr: 0x70, symBinAddr: 0x100001540, symSize: 0x90 }
+  - { offset: 0x11FDA9, size: 0x8, addend: 0x0, symName: '_$s11mac_capture11FrameOutputCfD', symObjAddr: 0x100, symBinAddr: 0x1000015D0, symSize: 0x30 }
+  - { offset: 0x11FDD6, size: 0x8, addend: 0x0, symName: '_$sSo11CFStringRefaSHSCSH9hashValueSivgTW', symObjAddr: 0x190, symBinAddr: 0x100001660, symSize: 0x30 }
+  - { offset: 0x11FDF2, size: 0x8, addend: 0x0, symName: '_$sSo11CFStringRefaSHSCSH4hash4intoys6HasherVz_tFTW', symObjAddr: 0x1C0, symBinAddr: 0x100001690, symSize: 0x40 }
+  - { offset: 0x11FE15, size: 0x8, addend: 0x0, symName: '_$sSo11CFStringRefaSQSCSQ2eeoiySbx_xtFZTW', symObjAddr: 0x250, symBinAddr: 0x100001720, symSize: 0x40 }
+  - { offset: 0x11FE70, size: 0x8, addend: 0x0, symName: '_$sSo11CFStringRefaSHSCSH13_rawHashValue4seedS2i_tFTW', symObjAddr: 0x200, symBinAddr: 0x1000016D0, symSize: 0x50 }
+  - { offset: 0x11FEF0, size: 0x8, addend: 0x0, symName: '_$sSD17dictionaryLiteralSDyxq_Gx_q_td_tcfCSo11CFStringRefa_SdTt0g5Tf4g_n', symObjAddr: 0x3F0, symBinAddr: 0x1000018C0, symSize: 0xF0 }
+  - { offset: 0x120194, size: 0x8, addend: 0x0, symName: '_$s11mac_capture11FrameOutputC6stream_03didD12SampleBuffer2ofySo8SCStreamC_So08CMSampleH3RefaSo0jD4TypeVtFTf4dnnn_n', symObjAddr: 0x710, symBinAddr: 0x100001BE0, symSize: 0x3F0 }
+  - { offset: 0x12056F, size: 0x8, addend: 0x0, symName: '_$sSo18SCShareableContentCSgSo7NSErrorCSgIeyBhyy_ABTz_', symObjAddr: 0x0, symBinAddr: 0x100002190, symSize: 0xA0 }
+  - { offset: 0x1205F9, size: 0x8, addend: 0x0, symName: '_$sSo7NSErrorCSgIeyBhy_ytTz_', symObjAddr: 0xA0, symBinAddr: 0x100002230, symSize: 0x80 }
+  - { offset: 0x1207B6, size: 0x8, addend: 0x0, symName: '_$sIetH_yts5Error_pIegHrzo_TR10async_MainTf3npf_n', symObjAddr: 0x170, symBinAddr: 0x100002300, symSize: 0x70 }
+  - { offset: 0x120814, size: 0x8, addend: 0x0, symName: '_$sIetH_yts5Error_pIegHrzo_TR10async_MainTf3npf_nTQ0_', symObjAddr: 0x1E0, symBinAddr: 0x100002370, symSize: 0xA0 }
+  - { offset: 0x12086A, size: 0x8, addend: 0x0, symName: '_$sIetH_yts5Error_pIegHrzo_TR10async_MainTf3npf_nTY1_', symObjAddr: 0x280, symBinAddr: 0x100002410, symSize: 0x30 }
+  - { offset: 0x12089D, size: 0x8, addend: 0x0, symName: '_$sIetH_yts5Error_pIegHrzo_TR10async_MainTf3npf_nTY2_', symObjAddr: 0x2B0, symBinAddr: 0x100002440, symSize: 0x40 }
+  - { offset: 0x1208F1, size: 0x8, addend: 0x0, symName: '_$ss12_ArrayBufferV19_getElementSlowPathyyXlSiFSo9SCDisplayC_Tg5', symObjAddr: 0x2F0, symBinAddr: 0x100002480, symSize: 0x1F0 }
+  - { offset: 0x120A47, size: 0x8, addend: 0x0, symName: _block_copy_helper, symObjAddr: 0x1420, symBinAddr: 0x100003570, symSize: 0x20 }
+  - { offset: 0x120A5B, size: 0x8, addend: 0x0, symName: '_$sypWOc', symObjAddr: 0x1440, symBinAddr: 0x100003590, symSize: 0x30 }
+  - { offset: 0x120A6F, size: 0x8, addend: 0x0, symName: _block_destroy_helper, symObjAddr: 0x1470, symBinAddr: 0x1000035C0, symSize: 0x10 }
+  - { offset: 0x120A83, size: 0x8, addend: 0x0, symName: ___swift_destroy_boxed_opaque_existential_0, symObjAddr: 0x1480, symBinAddr: 0x1000035D0, symSize: 0x30 }
+  - { offset: 0x120A97, size: 0x8, addend: 0x0, symName: '_$sSaySo17OS_dispatch_queueC8DispatchE10AttributesVGSayxGSTsWl', symObjAddr: 0x1510, symBinAddr: 0x100003660, symSize: 0x40 }
+  - { offset: 0x120AAB, size: 0x8, addend: 0x0, symName: ___swift_instantiateConcreteTypeFromMangledNameAbstractV2, symObjAddr: 0x1550, symBinAddr: 0x1000036A0, symSize: 0x40 }
+  - { offset: 0x120ABF, size: 0x8, addend: 0x0, symName: ___swift_project_boxed_opaque_existential_0, symObjAddr: 0x1590, symBinAddr: 0x1000036E0, symSize: 0x30 }
+  - { offset: 0x120BBA, size: 0x8, addend: 0x0, symName: _mac_capture_main, symObjAddr: 0x120, symBinAddr: 0x1000022B0, symSize: 0x50 }
+  - { offset: 0x120BF1, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_n', symObjAddr: 0x4E0, symBinAddr: 0x100002670, symSize: 0x130 }
+  - { offset: 0x120CA8, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTY0_', symObjAddr: 0x610, symBinAddr: 0x1000027A0, symSize: 0x110 }
+  - { offset: 0x120D74, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTQ1_', symObjAddr: 0x720, symBinAddr: 0x1000028B0, symSize: 0xA0 }
+  - { offset: 0x120F2B, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTY2_', symObjAddr: 0x7C0, symBinAddr: 0x100002950, symSize: 0x690 }
+  - { offset: 0x1211CC, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTQ3_', symObjAddr: 0xE50, symBinAddr: 0x100002FE0, symSize: 0xA0 }
+  - { offset: 0x121283, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTY4_', symObjAddr: 0xEF0, symBinAddr: 0x100003080, symSize: 0x90 }
+  - { offset: 0x12133A, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTQ5_', symObjAddr: 0xF80, symBinAddr: 0x100003110, symSize: 0xA0 }
+  - { offset: 0x1213F1, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTY6_', symObjAddr: 0x1020, symBinAddr: 0x1000031B0, symSize: 0x110 }
+  - { offset: 0x1214A8, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTY7_', symObjAddr: 0x1130, symBinAddr: 0x1000032C0, symSize: 0xA0 }
+  - { offset: 0x12152F, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTY8_', symObjAddr: 0x11D0, symBinAddr: 0x100003360, symSize: 0x110 }
+  - { offset: 0x1215B6, size: 0x8, addend: 0x0, symName: '_$s11mac_capture10CaptureAppV4mainyyYaKFZTf4d_nTY9_', symObjAddr: 0x12E0, symBinAddr: 0x100003470, symSize: 0x100 }
+...
