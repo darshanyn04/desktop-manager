@@ -1,6 +1,6 @@
 {
   "name": "desktop-manager",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Desktop automation manager for Appium, browsers, and screen streaming",
   "type": "module",
   "main": "./src/index.js",
