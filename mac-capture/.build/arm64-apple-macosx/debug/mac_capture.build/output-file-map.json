@@ -1,0 +1,19 @@
+{
+  "": {
+    "swift-dependencies": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/master.swiftdeps"
+  },
+  "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/Sources/mac-capture/FrameOutput.swift": {
+    "dependencies": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/FrameOutput.d",
+    "object": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/FrameOutput.swift.o",
+    "swiftmodule": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/FrameOutput~partial.swiftmodule",
+    "swift-dependencies": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/FrameOutput.swiftdeps",
+    "diagnostics": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/FrameOutput.dia"
+  },
+  "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/Sources/mac-capture/mac_capture.swift": {
+    "dependencies": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/mac_capture.d",
+    "object": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/mac_capture.swift.o",
+    "swiftmodule": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/mac_capture~partial.swiftmodule",
+    "swift-dependencies": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/mac_capture.swiftdeps",
+    "diagnostics": "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/mac-capture/.build/arm64-apple-macosx/debug/mac_capture.build/mac_capture.dia"
+  }
+}

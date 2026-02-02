@@ -1,0 +1,264 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.mac-capture-x86_64-apple-macosx26.0-release.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/sources",
+      "importPath" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/Sources/mac-capture/FrameOutput.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/Sources/mac-capture/mac_capture.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "mac_capture",
+      "moduleOutputPath" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/Modules/mac_capture.swiftmodule",
+      "objects" : [
+        "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/FrameOutput.swift.o",
+        "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/mac_capture.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "x86_64-apple-macosx13.0",
+        "-whole-module-optimization",
+        "-num-threads",
+        "8",
+        "-serialize-diagnostics",
+        "-O",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "mac_capture_main",
+        "-color-diagnostics",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "mac_capture"
+      ],
+      "outputFileMapPath" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/FrameOutput.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/mac_capture.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/Modules/mac_capture.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/Sources/mac-capture/FrameOutput.swift",
+        "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/Sources/mac-capture/mac_capture.swift"
+      ],
+      "tempsPath" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build",
+      "wholeModuleOptimization" : true
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "mac_capture" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "mac_capture",
+      "-package-name",
+      "mac_capture",
+      "-c",
+      "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/Sources/mac-capture/FrameOutput.swift",
+      "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/Sources/mac-capture/mac_capture.swift",
+      "-I",
+      "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/Modules",
+      "-target",
+      "x86_64-apple-macosx13.0",
+      "-whole-module-optimization",
+      "-num-threads",
+      "8",
+      "-serialize-diagnostics",
+      "-O",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "mac_capture_main",
+      "-color-diagnostics",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "mac_capture",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "mac_capture" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac-capture.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/FrameOutput.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/mac_capture.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac-capture.product/Objects.LinkFileList"
+    },
+    "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/Sources/mac-capture/FrameOutput.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/Sources/mac-capture/mac_capture.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/mac_capture.build/sources"
+    },
+    "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/fireflinkcloud/Documents/FireFlink_Cloud/desktop-manager/src/mac-capture/.build/x86_64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

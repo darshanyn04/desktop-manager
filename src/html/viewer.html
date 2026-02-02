@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body style="margin:0;background:black">
+<img id="screen" />
+
+<script>
+const ws = new WebSocket('ws://10.10.70.197:9500');
+ws.binaryType = 'arraybuffer';
+
+ws.onmessage = e => {
+  const blob = new Blob([e.data], { type: 'image/jpeg' });
+  document.getElementById('screen').src = URL.createObjectURL(blob);
+};
+</script>
+
+</body>
+</html>
