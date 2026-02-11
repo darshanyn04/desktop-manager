@@ -21,26 +21,24 @@ export function startWindowsCapture({
 
   proc = spawn(
     'ffmpeg',
-    [
-      // Show useful logs, but not spammy
-      '-loglevel', 'info',
+   [
+  '-loglevel', 'info',
 
-      // Desktop capture
-      '-f', 'gdigrab',
-      '-framerate', String(fps),
-      '-i', 'desktop',
+  '-f', 'gdigrab',
+  '-framerate', String(fps),
+  '-i', 'desktop',
 
-      // Resize (CPU friendly)
-      '-vf', `scale=${width}:${height}`,
+  '-vf',
+  `scale=${width}:${height}:force_original_aspect_ratio=decrease,scale=trunc(iw/2)*2:trunc(ih/2)*2`,
 
-      // MJPEG pipe
-      '-f', 'image2pipe',
-      '-vcodec', 'mjpeg',
-      '-q:v', '5',
-      '-flush_packets', '1',
+  '-f', 'image2pipe',
+  '-vcodec', 'mjpeg',
+  '-q:v', '5',
+  '-flush_packets', '1',
 
-      'pipe:1'
-    ],
+  'pipe:1'
+]
+,
     {
       stdio: ['ignore', 'pipe', 'pipe']
     }
