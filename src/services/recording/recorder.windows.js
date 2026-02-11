@@ -29,6 +29,8 @@ export function startWindowsRecording() {
       '-framerate', String(FPS),
       '-i', 'desktop',
 
+      '-vf', 'scale=1280:720',
+
       // Stabilize timestamps
       '-vsync', '1',
 
