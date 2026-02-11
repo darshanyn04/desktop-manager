@@ -19,33 +19,32 @@ export function startWindowsCapture({
   console.log('🪟 [WIN-FFMPEG] Starting Windows screen capture');
   console.log(`🎯 [WIN-FFMPEG] fps=${fps}, resolution=${width}x${height}`);
 
-proc = spawn(
-  'ffmpeg',
-  [
-    '-loglevel', 'info',
+  proc = spawn(
+    'ffmpeg',
+    [
+      // Show useful logs, but not spammy
+      '-loglevel', 'info',
 
-    // Capture desktop
-    '-f', 'gdigrab',
-    '-framerate', String(fps),
-    '-i', 'desktop',
+      // Desktop capture
+      '-f', 'gdigrab',
+      '-framerate', String(fps),
+      '-i', 'desktop',
 
-    // Force exact 1280x720
-    '-vf', 'scale=1280:720',
+      // Resize (CPU friendly)
+      '-vf', `scale=${width}:${height}`,
 
-    // MJPEG pipe
-    '-f', 'image2pipe',
-    '-vcodec', 'mjpeg',
-    '-q:v', '5',
-    '-pix_fmt', 'yuvj420p',
-    '-flush_packets', '1',
+      // MJPEG pipe
+      '-f', 'image2pipe',
+      '-vcodec', 'mjpeg',
+      '-q:v', '5',
+      '-flush_packets', '1',
 
-    'pipe:1'
-  ],
-  {
-    stdio: ['ignore', 'pipe', 'pipe']
-  }
-);
-
+      'pipe:1'
+    ],
+    {
+      stdio: ['ignore', 'pipe', 'pipe']
+    }
+  );
 
   proc.on('spawn', () => {
     console.log('✅ [WIN-FFMPEG] ffmpeg process spawned');
