@@ -1,6 +1,7 @@
 import express from "express";
 import { startScreenStream, takeScreenshot } from "./services/screen-stream/index.js";
 import { registerRecordingRoutes } from "./services/recording/index.js";
+import { registerPlaywrightRoutes } from "./services/browser-launcher-playwright/index.js";
 
 export function createDesktopManager({
   apiPort = 9400,
@@ -10,6 +11,7 @@ export function createDesktopManager({
 
   startScreenStream({ port: streamPort });
   registerRecordingRoutes(app);
+  registerPlaywrightRoutes(app);
 
   app.get("/health", (_, res) => res.send("OK"));
 
