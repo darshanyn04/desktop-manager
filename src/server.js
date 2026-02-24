@@ -11,6 +11,7 @@ export function createDesktopManager({
 
   startScreenStream({ port: streamPort });
   registerRecordingRoutes(app);
+  app.use(express.json());
   registerPlaywrightRoutes(app);
 
   app.get("/health", (_, res) => res.send("OK"));

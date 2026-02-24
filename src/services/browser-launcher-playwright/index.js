@@ -4,14 +4,17 @@ import { execSync } from "child_process";
 import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
+import os from "os";
+
 
 const sessions = new Map();
 const PW_ROOT = path.resolve(".pw-versions");
 
-// 🔥 Always use controlled Chrome
-const DEFAULT_CHROME_PATH =
-  "C:/FireFlink_Cloud/Chrome_Browsers/Chrome_121/chrome.exe";
+// 🔥 Controlled Chrome (Hardcoded)
 
+/**
+ * Ensure specific Playwright version is installed
+ */
 function ensurePlaywrightInstalled(version) {
   const dir = path.join(PW_ROOT, version);
 
@@ -37,21 +40,52 @@ function ensurePlaywrightInstalled(version) {
 /**
  * Start Playwright Server
  */
-export async function startPlaywrightServer({
-  version = "1.58",
-  browser = "chromium",
-  headless = false,
-  chromePath
-} = {}) {
+export async function startPlaywrightServer(options = {}) {
+  console.log(options)
+  const version = options.version || "1.58.0";
+  const browser = options.browser || "chromium";
+  const browserVersion = options.browserVersion || "141";
+  const headless =
+    options.headless === true || options.headless === "true";
+    let DEFAULT_BROWSER_PATH =null;
+
+    if(browser==="chromium"){
+      console.log(os.platform())
+      if(os.platform()==="win32"){
+      DEFAULT_BROWSER_PATH=`C:/FireFlink_Cloud/Chrome_Browsers/Chrome_${browserVersion}/chrome.exe`;
+      }
+    }
+    else if(browser === "firefox"){
+
+    }
+    else{
+      // const DEFAULT_BROWSER_PATH =
+    }
+
+
+
+
+
+  if (!["chromium", "firefox", "webkit"].includes(browser)) {
+    throw new Error(`Invalid browser type: ${browser}`);
+  }
+
+  if (!fs.existsSync(DEFAULT_BROWSER_PATH)) {
+    throw new Error(
+      `Chrome executable not found at ${DEFAULT_BROWSER_PATH}`
+    );
+  }
 
   const sessionId = uuidv4();
   const port = await getPort();
 
-  console.log(`Requested Playwright version: ${version}`);
+  console.log(`[PW] Starting session ${sessionId}`);
+  console.log(`[PW] Version: ${version}`);
+  console.log(`[PW] Browser: ${browser}`);
+  console.log(`[PW] Headless: ${headless}`);
 
   const versionDir = ensurePlaywrightInstalled(version);
 
-  // Load that specific version
   const requireFromVersion = createRequire(
     path.join(versionDir, "package.json")
   );
@@ -61,20 +95,13 @@ export async function startPlaywrightServer({
   const browserType = playwright[browser];
 
   if (!browserType) {
-    throw new Error(`Invalid browser: ${browser}`);
-  }
-
-  // 🔥 Always resolve chrome path safely
-  const executablePath = chromePath || DEFAULT_CHROME_PATH;
-
-  if (!fs.existsSync(executablePath)) {
-    throw new Error(`Chrome executable not found at ${executablePath}`);
+    throw new Error(`Browser "${browser}" not supported by Playwright`);
   }
 
   const browserServer = await browserType.launchServer({
     headless,
     port,
-    executablePath,
+    executablePath: DEFAULT_BROWSER_PATH,
     args: [
       "--no-sandbox",
       "--disable-dev-shm-usage",
@@ -90,8 +117,7 @@ export async function startPlaywrightServer({
     wsEndpoint,
     version,
     browser,
-    port,
-    executablePath
+    port
   });
 
   return {
@@ -100,13 +126,12 @@ export async function startPlaywrightServer({
     version,
     browser,
     port,
-    headless,
-    chromePath: executablePath
+    headless
   };
 }
 
 /**
- * Stop server
+ * Stop Playwright Server
  */
 export async function stopPlaywrightServer(sessionId) {
   const session = sessions.get(sessionId);
@@ -117,13 +142,15 @@ export async function stopPlaywrightServer(sessionId) {
 
   await session.browserServer.close();
   sessions.delete(sessionId);
+
+  console.log(`[PW] Session ${sessionId} stopped`);
 }
 
 /**
- * List sessions
+ * List active sessions
  */
 export function listPlaywrightSessions() {
-  return Array.from(sessions.values()).map(s => ({
+  return Array.from(sessions.values()).map((s) => ({
     sessionId: s.sessionId,
     wsEndpoint: s.wsEndpoint,
     version: s.version,
@@ -133,12 +160,12 @@ export function listPlaywrightSessions() {
 }
 
 /**
- * Register routes
+ * Register Express Routes
  */
 export function registerPlaywrightRoutes(app) {
-
   app.post("/api/playwright/start", async (req, res) => {
     try {
+      console.log(`Request Body ${req.body}`)
       const session = await startPlaywrightServer(req.body || {});
       res.json(session);
     } catch (e) {
@@ -148,8 +175,14 @@ export function registerPlaywrightRoutes(app) {
 
   app.post("/api/playwright/stop", async (req, res) => {
     try {
-      await stopPlaywrightServer(req.body.sessionId);
-      res.json({ status: "stopped" });
+      const { sessionId } = req.body;
+
+      if (!sessionId) {
+        throw new Error("sessionId is required");
+      }
+
+      await stopPlaywrightServer(sessionId);
+      res.json({ status: "stopped", sessionId });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
