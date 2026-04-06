@@ -2,6 +2,9 @@ import express from "express";
 import { startScreenStream, takeScreenshot } from "./services/screen-stream/index.js";
 import { registerRecordingRoutes } from "./services/recording/index.js";
 import { registerPlaywrightRoutes } from "./services/browser-launcher-playwright/index.js";
+import { registerFileRoutes } from "./services/file-manager/index.js";
+import { registerDeviceHealthRoutes } from "./services/device-health/index.js";
+
 
 export function createDesktopManager({
   apiPort = 9400,
@@ -13,6 +16,8 @@ export function createDesktopManager({
   registerRecordingRoutes(app);
   app.use(express.json());
   registerPlaywrightRoutes(app);
+  registerFileRoutes(app);
+  registerDeviceHealthRoutes(app);
 
   app.get("/health", (_, res) => res.send("OK"));
 

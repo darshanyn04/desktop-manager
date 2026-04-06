@@ -1,0 +1,1 @@
+export { registerFileRoutes } from "./file-controller.js";
