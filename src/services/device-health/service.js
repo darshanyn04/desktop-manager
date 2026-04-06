@@ -1,5 +1,5 @@
 import axios from "axios";
-import { exec } from "child_process";
+import { exec, execSync } from "child_process";
 import os from "os";
 
 
@@ -74,24 +74,60 @@ function getConnectedDevices() {
   });
 }
 
-export { getConnectedDevices };
+// export { getConnectedDevices };
 
-function getMachineIp() {
-const interfaces = os.networkInterfaces();
+// function getMachineIp() {
+// const interfaces = os.networkInterfaces();
 
-  const vpnInterface = interfaces["tun0"];
+//   const vpnInterface = interfaces["tun0"];
 
-  if (!vpnInterface) {
-    throw new Error("VPN (tun0) interface not found");
+//   if (!vpnInterface) {
+//     throw new Error("VPN (tun0) interface not found");
+//   }
+
+//   for (const iface of vpnInterface) {
+//     if (iface.family === "IPv4" && !iface.internal) {
+//       return iface.address;
+//     }
+//   }
+
+//   throw new Error("No IPv4 address found for tun0");
+// }
+export function getMachineIp() {
+  const interfaces = os.networkInterfaces();
+
+  // Detect platform
+  const isMac = process.platform === "darwin";
+  const isLinux = process.platform === "linux";
+
+  let vpnInterfaces = [];
+
+  if (isLinux) {
+    // Linux → tun0
+    if (interfaces["tun0"]) {
+      vpnInterfaces.push("tun0");
+    }
+  } else if (isMac) {
+    // macOS → utun*
+    vpnInterfaces = Object.keys(interfaces).filter(name =>
+      name.startsWith("utun")
+    );
   }
 
-  for (const iface of vpnInterface) {
-    if (iface.family === "IPv4" && !iface.internal) {
-      return iface.address;
+  // Loop through candidate interfaces
+  for (const ifaceName of vpnInterfaces) {
+    const ifaceList = interfaces[ifaceName];
+
+    if (!ifaceList) continue;
+
+    for (const iface of ifaceList) {
+      if (iface.family === "IPv4" && !iface.internal) {
+        return iface.address;
+      }
     }
   }
 
-  throw new Error("No IPv4 address found for tun0");
+  throw new Error("No VPN IPv4 address found");
 }
 
 
@@ -114,14 +150,31 @@ export async function pushDeviceHealthToSheet() {
   }
 }
 
+function getIOSDevices() {
+  try {
+    const output = execSync("idevice_id -l").toString().trim();
+    console.log("The iOS devices are"+output);
+    return new Set(output ? output.split("\n") : []);
+  } catch (err) {
+    console.error("Error fetching iOS devices:", err.message);
+    return new Set();
+  }
+}
 
-// 🔹 Main logic
 // export async function checkDeviceHealth() {
-//     const machineIp = getMachineIp();
+//   const machineIp = getMachineIp();
+
 //   const apiData = await fetchDevices(machineIp);
 //   const adbDevices = await getConnectedDevices();
 
-//   const devices = apiData.devices.map(d => {
+//   // ✅ SAFE extraction
+//   const deviceList = apiData?.devices || [];
+
+//   if (!Array.isArray(deviceList)) {
+//     throw new Error("Invalid API response: devices is not an array");
+//   }
+
+//   const devices = deviceList.map(d => {
 //     const state = adbDevices.get(d.udid);
 
 //     let status = "OFFLINE";
@@ -144,12 +197,10 @@ export async function pushDeviceHealthToSheet() {
 //     devices
 //   };
 // }
-
 export async function checkDeviceHealth() {
   const machineIp = getMachineIp();
 
   const apiData = await fetchDevices(machineIp);
-  const adbDevices = await getConnectedDevices();
 
   // ✅ SAFE extraction
   const deviceList = apiData?.devices || [];
@@ -158,13 +209,38 @@ export async function checkDeviceHealth() {
     throw new Error("Invalid API response: devices is not an array");
   }
 
-  const devices = deviceList.map(d => {
-    const state = adbDevices.get(d.udid);
+  // 🔥 Detect if ANY Android device exists
+  const hasAndroid = deviceList.some(
+    d => !(d.deviceName?.toLowerCase().includes("iphone"))
+  );
 
+  // 🔥 Only call ADB if needed
+  let adbDevices = new Map();
+  if (hasAndroid) {
+    adbDevices = await getConnectedDevices();
+  }
+
+  const iosDevices = getIOSDevices();
+
+  const devices = deviceList.map(d => {
     let status = "OFFLINE";
-    if (state === "device") status = "ONLINE";
-    else if (state === "unauthorized") status = "UNAUTHORIZED";
-    else if (state === "offline") status = "ADB_OFFLINE";
+
+    const isIOS =
+      d.deviceName?.toLowerCase().includes("iphone");
+
+    if (isIOS) {
+      // ✅ iPhone logic
+      if (iosDevices.has(d.udid)) {
+        status = "ONLINE";
+      }
+    } else {
+      // ✅ Android logic
+      const state = adbDevices.get(d.udid);
+
+      if (state === "device") status = "ONLINE";
+      else if (state === "unauthorized") status = "UNAUTHORIZED";
+      else if (state === "offline") status = "ADB_OFFLINE";
+    }
 
     return {
       deviceName: d.deviceName,
