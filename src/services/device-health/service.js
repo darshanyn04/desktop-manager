@@ -16,10 +16,12 @@ const res = await axios.get(`${GET_DEVICE_DETAILS_URL}?hostIp=${machineIp}`, {
   return res.data;
 }
 
-setInterval(() => {
-  console.log("🔄 Checking device health after 30 seconds");
-  pushDeviceHealthToSheet();
-}, 30000); 
+
+
+// setInterval(() => {
+//   console.log("🔄 Checking device health after 30 seconds");
+//   pushDeviceHealthToSheet();
+// }, 30000); 
 
 // 🔹 Get ADB devices
 function getConnectedDevices() {
@@ -132,9 +134,13 @@ export function getMachineIp() {
 
 
 
-export async function pushDeviceHealthToSheet() {
+export async function pushDeviceHealthToSheet(enableMobile) {
   try {
-    const healthData = await checkDeviceHealth();
+    const healthData = await checkDeviceHealth({ enableMobile });
+    if (!healthData) {
+    console.log("⏸️ Skipping push (mobile disabled)");
+    return;
+  }
 
     const response = await axios.post(UPDATE_DEVICE_STATUS_URL, healthData, {
       headers: {
@@ -165,7 +171,6 @@ function getIOSDevices() {
 //   const machineIp = getMachineIp();
 
 //   const apiData = await fetchDevices(machineIp);
-//   const adbDevices = await getConnectedDevices();
 
 //   // ✅ SAFE extraction
 //   const deviceList = apiData?.devices || [];
@@ -174,13 +179,38 @@ function getIOSDevices() {
 //     throw new Error("Invalid API response: devices is not an array");
 //   }
 
-//   const devices = deviceList.map(d => {
-//     const state = adbDevices.get(d.udid);
+//   // 🔥 Detect if ANY Android device exists
+//   const hasAndroid = deviceList.some(
+//     d => !(d.deviceName?.toLowerCase().includes("iphone"))
+//   );
 
+//   // 🔥 Only call ADB if needed
+//   let adbDevices = new Map();
+//   if (hasAndroid) {
+//     adbDevices = await getConnectedDevices();
+//   }
+
+//   const iosDevices = getIOSDevices();
+
+//   const devices = deviceList.map(d => {
 //     let status = "OFFLINE";
-//     if (state === "device") status = "ONLINE";
-//     else if (state === "unauthorized") status = "UNAUTHORIZED";
-//     else if (state === "offline") status = "ADB_OFFLINE";
+
+//     const isIOS =
+//       d.deviceName?.toLowerCase().includes("iphone");
+
+//     if (isIOS) {
+//       // ✅ iPhone logic
+//       if (iosDevices.has(d.udid)) {
+//         status = "ONLINE";
+//       }
+//     } else {
+//       // ✅ Android logic
+//       const state = adbDevices.get(d.udid);
+
+//       if (state === "device") status = "ONLINE";
+//       else if (state === "unauthorized") status = "UNAUTHORIZED";
+//       else if (state === "offline") status = "ADB_OFFLINE";
+//     }
 
 //     return {
 //       deviceName: d.deviceName,
@@ -197,24 +227,27 @@ function getIOSDevices() {
 //     devices
 //   };
 // }
-export async function checkDeviceHealth() {
+
+export async function checkDeviceHealth({ enableMobile = false } = {}) {
+  if (!enableMobile) {
+    console.log("⏸️ Skipping device health (mobile mode disabled)");
+    return null; // or return empty object
+  }
+
   const machineIp = getMachineIp();
 
   const apiData = await fetchDevices(machineIp);
 
-  // ✅ SAFE extraction
   const deviceList = apiData?.devices || [];
 
   if (!Array.isArray(deviceList)) {
     throw new Error("Invalid API response: devices is not an array");
   }
 
-  // 🔥 Detect if ANY Android device exists
   const hasAndroid = deviceList.some(
     d => !(d.deviceName?.toLowerCase().includes("iphone"))
   );
 
-  // 🔥 Only call ADB if needed
   let adbDevices = new Map();
   if (hasAndroid) {
     adbDevices = await getConnectedDevices();
@@ -229,12 +262,10 @@ export async function checkDeviceHealth() {
       d.deviceName?.toLowerCase().includes("iphone");
 
     if (isIOS) {
-      // ✅ iPhone logic
       if (iosDevices.has(d.udid)) {
         status = "ONLINE";
       }
     } else {
-      // ✅ Android logic
       const state = adbDevices.get(d.udid);
 
       if (state === "device") status = "ONLINE";
