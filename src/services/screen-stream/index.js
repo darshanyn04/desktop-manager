@@ -1,6 +1,9 @@
 import os from 'os';
 import { WebSocketServer } from 'ws';
 import { getLatestFrame, setLatestFrame } from '../recording/screenshotState.js';
+import { execSync } from 'child_process';
+import fs from 'fs';
+
 
 
 import {
@@ -91,13 +94,49 @@ function stopCapture(platform) {
   if (platform === 'win32') stopWindowsCapture();
 }
 
-export function takeScreenshot() {
-  const frame = getLatestFrame();
+// export function takeScreenshot() {
+//   const frame = getLatestFrame();
 
-  if (!frame) {
-    throw new Error('No frame available yet (stream not started)');
+//   if (!frame) {
+//     throw new Error('No frame available yet (stream not started)');
+//   }
+
+//   return frame;
+// }
+export function takeScreenshot() {
+  const platform = os.platform();
+
+  let frame;
+
+  if (platform === 'linux') {
+    frame = captureLinuxScreenshot();
+  } else if (platform === 'win32') {
+    frame = captureWindowsScreenshot();
+  } else if (platform === 'darwin') {
+    frame = captureMacScreenshot();
+  } else {
+    throw new Error(`Unsupported platform: ${platform}`);
   }
 
-  return frame;
+  return frame; // ✅ return raw buffer (NOT base64)
 }
+export function captureLinuxScreenshot() {
+  const display = process.env.DISPLAY || ':0.0';
 
+  // 🔍 Get actual screen resolution dynamically
+  const resolution = execSync(`xdpyinfo | grep dimensions`)
+    .toString()
+    .match(/(\d+x\d+)/)[0];
+
+  const buffer = execSync(`
+    ffmpeg -loglevel error \
+    -f x11grab \
+    -video_size ${resolution} \
+    -i ${display} \
+    -frames:v 1 \
+    -f image2pipe \
+    -vcodec mjpeg -
+  `);
+
+  return buffer;
+}

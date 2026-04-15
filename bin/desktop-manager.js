@@ -32,5 +32,5 @@ if (isMobile) {
     } finally {
       isRunning = false;
     }
-  }, 60000);
+  }, 5000);
 }
