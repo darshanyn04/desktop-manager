@@ -118,8 +118,10 @@ export function takeScreenshot() {
     throw new Error(`Unsupported platform: ${platform}`);
   }
 
-  return frame; // ✅ return raw buffer (NOT base64)
+  return frame;
 }
+
+
 export function captureLinuxScreenshot() {
   const display = process.env.DISPLAY || ':0.0';
 
@@ -138,5 +140,10 @@ export function captureLinuxScreenshot() {
     -vcodec mjpeg -
   `);
 
+  return buffer;
+}
+
+export function captureWindowsScreenshot(){
+  const buffer = execSync(`ffmpeg -loglevel error -f gdigrab -i desktop -frames:v 1 -f image2pipe -vcodec mjpeg -`);
   return buffer;
 }
