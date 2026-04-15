@@ -147,3 +147,9 @@ export function captureWindowsScreenshot(){
   const buffer = execSync(`ffmpeg -loglevel error -f gdigrab -i desktop -frames:v 1 -f image2pipe -vcodec mjpeg -`);
   return buffer;
 }
+
+export function captureMacScreenshot(){
+  const file = `/tmp/screenshot-${Date.now()}.jpeg`;
+  execSync(`screencapture -x -t jpg ${file}`);
+  return fs.readFileSync(file);
+}
